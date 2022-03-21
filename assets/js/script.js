@@ -1,7 +1,7 @@
 var allTasksArray = [];
 
 var currentDate = moment().format('dddd MMMM Do YYYY');
-
+var timeExist = false;
 var taskArea = $(".tasks");
 
 $(currentDay).text(currentDate);
@@ -25,7 +25,8 @@ var loadTasks = function(){
         var findSpan = $(findHour).children(".tasks").children("span");
         // assigns task text to correct span element
         $(findSpan).text(taskText);
-    }   
+    }
+       
 };
 
 
@@ -35,7 +36,7 @@ var saveTasks= function(){
 };
 
 
-// CHANGE TO TEXT INPUT AND BACK - used taskmaster pro for reference
+// CHANGE TO TEXT INPUT AND BACK - used Taskmaster Pro for reference
 // on click task area
 $(taskArea).on("click", function() {
     // pulls existing text to push to input box
@@ -63,19 +64,34 @@ $(taskArea).on("click", function() {
         // set variables to save in array
         var taskTime = $(this).parent().attr("id");
         // console.log(taskTime);
-        var newTask = [taskTime, newText]
-             
+        var newTask = [];
         
-        //console.log(newTaskArray);
+        newTask = [taskTime, newText];
+        
+        // for (i=0; i<allTasksArray.length; i++){
+        //     timeExist = false;
+        //     var timeCheck = allTasksArray[i][0]
+        //     if (timeCheck === taskTime){
+        //         timeExist = true;
+        //         console.log("This time exists already!");
+        //         allTasksArray[i][1] = newText;
+        //         console.log(allTasksArray[i]);
+        //         saveTasks();
+        //         return;
+        //     }            
+
+        // }console.log("This time doesn't exist yet!")
+        //         allTasksArray.push(newTask);
+        
+        console.log(newTask);
         allTasksArray.push(newTask);
-        allTasksArray.sort((a,b) => {return a.time - b.time;});
+        
         console.log(allTasksArray);
 
         saveTasks();
 
     })
     
-
 });
 
 loadTasks();
