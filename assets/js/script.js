@@ -5,6 +5,27 @@ var timeExist = false;
 var taskArea = $(".tasks");
 
 $(currentDay).text(currentDate);
+var currentHour = moment().hours()
+
+// for loop
+// i=9 i<18 i++
+for (var i=9; i<18; i++){
+    var hourElement = document.getElementById(i)
+    // console.log(hourElement);
+    if (currentHour === i){
+        $(hourElement).addClass("present");
+        //console.log(`${hourElement} is now`);
+    } else if (currentHour> i){
+        //console.log(`${hourElement} is in the past`);
+        $(hourElement).addClass("past");
+    } else {
+        $(hourElement).addClass("future");
+        //console.log(`${hourElement} is in the future`);
+    }
+};
+// if current hour === row id then style .present
+// else if currentHour > row id then style .past
+// else style row future
 
 
 // LOAD TASKS
@@ -14,9 +35,9 @@ var loadTasks = function(){
     if (!allTasksArray){
         allTasksArray = [];
     };
-
-    for (i=0;i<allTasksArray.length;i++){
-        var hour = allTasksArray[i];
+    
+    for (var i=0;i<allTasksArray.length;i++){
+        var hour = allTasksArray[i];     
         var taskTime = hour[0];
         var taskText = hour[1];
         // locate correct row
@@ -56,39 +77,36 @@ $(taskArea).on("click", function() {
         // variable for storing edited text
         var newText = $(this).siblings(".tasks").children(".task-item").val()
             .trim();
-        // assigns edited text and class to span element
-        var span = $("<span>").text(newText).attr("class", "task-item");      
-        // replaces input with span
-        $(textInput).replaceWith(span);
+        // this if statement stops input being overwritten with blank "" when save button clicked more than once
+        if (newText){
+            // assigns edited text and class to span element
+            var span = $("<span>").text(newText).attr("class", "task-item");      
+            // replaces input with span
+            $(textInput).replaceWith(span);
 
-        // set variables to save in array
-        var taskTime = $(this).parent().attr("id");
-        // console.log(taskTime);
-        var newTask = [];
+            // set variables to save in array
+            var taskTime = $(this).parent().attr("id");
+            // console.log(taskTime);
+            var newTask = [];
+            allTasksArray = JSON.parse(localStorage.getItem("taskList")) || [];
+            var exist = false;
+            newTask = [taskTime, newText];
+            // had assistance from tutor for this for loop
+            for(let i=0;i<allTasksArray.length;i++){
+                if(allTasksArray[i][0] == taskTime){
+                    allTasksArray[i][1] = newText;
+                    exist = true;
+                }
+            }
         
-        newTask = [taskTime, newText];
-        
-        // for (i=0; i<allTasksArray.length; i++){
-        //     timeExist = false;
-        //     var timeCheck = allTasksArray[i][0]
-        //     if (timeCheck === taskTime){
-        //         timeExist = true;
-        //         console.log("This time exists already!");
-        //         allTasksArray[i][1] = newText;
-        //         console.log(allTasksArray[i]);
-        //         saveTasks();
-        //         return;
-        //     }            
+            console.log(newTask);
+            if(!exist){
+            allTasksArray.push(newTask);
+            }
+            console.log(allTasksArray);
 
-        // }console.log("This time doesn't exist yet!")
-        //         allTasksArray.push(newTask);
-        
-        console.log(newTask);
-        allTasksArray.push(newTask);
-        
-        console.log(allTasksArray);
-
-        saveTasks();
+            saveTasks();
+        }
 
     })
     
