@@ -1,41 +1,40 @@
+// store all saved tasks - used for pushing to local storage
 var allTasksArray = [];
-
+// fetches the current date
 var currentDate = moment().format('dddd MMMM Do YYYY');
+// for checking if a time already exists in the array
 var timeExist = false;
+// used for event click to indicate a task for editing
 var taskArea = $(".tasks");
-
+// sets display text for date
 $(currentDay).text(currentDate);
+// pulls current hour from moment.js for below styling based on time
 var currentHour = moment().hours()
 
-// for loop
-// i=9 i<18 i++
+// loop checks the current time on page load and sets background colors accordingly
 for (var i=9; i<18; i++){
-    var hourElement = document.getElementById(i)
-    // console.log(hourElement);
+    var hourElement = document.getElementById(i);
     if (currentHour === i){
+        // sets color to red if time is now
         $(hourElement).addClass("present");
-        //console.log(`${hourElement} is now`);
     } else if (currentHour> i){
-        //console.log(`${hourElement} is in the past`);
+        // sets color to grey if time has passed
         $(hourElement).addClass("past");
     } else {
+        // sets color to green if time in future
         $(hourElement).addClass("future");
-        //console.log(`${hourElement} is in the future`);
     }
 };
-// if current hour === row id then style .present
-// else if currentHour > row id then style .past
-// else style row future
 
 
 // LOAD TASKS
 var loadTasks = function(){
     allTasksArray = JSON.parse(localStorage.getItem("taskList"));
-
+    // creates blank array if nothing saved
     if (!allTasksArray){
         allTasksArray = [];
     };
-    
+    // loop to display saved tasks in correct time blocks
     for (var i=0;i<allTasksArray.length;i++){
         var hour = allTasksArray[i];     
         var taskTime = hour[0];
@@ -83,12 +82,12 @@ $(taskArea).on("click", function() {
             var span = $("<span>").text(newText).attr("class", "task-item");      
             // replaces input with span
             $(textInput).replaceWith(span);
-
             // set variables to save in array
             var taskTime = $(this).parent().attr("id");
-            // console.log(taskTime);
+            // var to hold new info to push to array and then local storage
             var newTask = [];
             allTasksArray = JSON.parse(localStorage.getItem("taskList")) || [];
+            // var to record if something exists for the given time already
             var exist = false;
             newTask = [taskTime, newText];
             // had assistance from tutor for this for loop
@@ -97,19 +96,14 @@ $(taskArea).on("click", function() {
                     allTasksArray[i][1] = newText;
                     exist = true;
                 }
-            }
-        
-            console.log(newTask);
+            }            
             if(!exist){
             allTasksArray.push(newTask);
             }
-            console.log(allTasksArray);
-
             saveTasks();
         }
-
-    })
-    
+    })  
 });
 
+// load the existing tasks
 loadTasks();
