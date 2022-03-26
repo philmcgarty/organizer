@@ -7,7 +7,7 @@ var timeExist = false;
 // used for event click to indicate a task for editing
 var taskArea = $(".tasks");
 // sets display text for date
-$(currentDay).text(currentDate);
+$("#currentDay").text(currentDate);
 // pulls current hour from moment.js for below styling based on time
 var currentHour = moment().hours()
 
